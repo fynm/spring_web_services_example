@@ -1,0 +1,25 @@
+Restful Web Services
+
+Users Example
+Retrieve All users  - GET /users
+Create a user       - POST /users
+Retrieve a user     - GET /users/{id} -> /users/1 etc
+Delete a user       - DELETE /users{id}
+
+Users -> Posts (OneToMany)
+
+Retrieve all posts      - GET /users/{id}/posts
+Create a posts          - POST /users/{id}/posts
+Retrieve details of post- GET /users/{id}/posts/{post_id}
+
+Servlets
+
+What is a dispatcher servlet?
+    Dependency integrated with Spring Web
+    Will help with sending information back and forth when called with Restful Methods
+Who is configuring dispatcher servlet?
+    Spring Web
+
+
+
+
