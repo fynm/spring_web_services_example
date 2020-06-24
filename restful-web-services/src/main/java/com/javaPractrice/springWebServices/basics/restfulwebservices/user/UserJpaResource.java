@@ -2,8 +2,12 @@ package com.javaPractrice.springWebServices.basics.restfulwebservices.user;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
+
+import com.javaPractrice.springWebServices.basics.restfulwebservices.post.Post;
+import com.javaPractrice.springWebServices.basics.restfulwebservices.post.PostRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +25,27 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 // import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
-public class UserResource {
-    
+public class UserJpaResource {
+
     @Autowired
-    private UserDaoService service;
-    
-    //retreive all users
-    //GET /users
-    @GetMapping(path="/users")
-    public List<User> retrieveAllUsers(){
-        return service.findAll();
+    private UserRepository userRepo;
+
+    @Autowired
+    private PostRepository postRepo;
+
+    // retreive all users
+    // GET /users
+    @GetMapping(path = "/jpa/users")
+    public List<User> retrieveAllUsers() {
+        return userRepo.findAll();
     }
 
-    //retrieveUser(int id) - specific user based on id
-    //GET /users/{id}
+    // retrieveUser(int id) - specific user based on id
+    // GET /users/{id}
 
-    @GetMapping(path="/users/{id}")
-    public User retrieveUser_id(@PathVariable int id){
-        User user = service.findOne(id);
+    @GetMapping(path = "/jpa/users/{id}")
+    public Optional<User> retrieveUser_id(@PathVariable int id) {
+        Optional<User> user = userRepo.findById(id);
         if(user == null){
             throw new UserNotFoundException("id-"+id); //created exception msg and mark it as 404 
         }
@@ -57,9 +64,9 @@ public class UserResource {
     //input - details of the user
     //output - created and returned created URI
     //Need @Valid for validations
-    @PostMapping(path="/users")
+    @PostMapping(path="/jpa/users")
     public ResponseEntity createUser(@Valid @RequestBody User user){
-        User savedUser = service.save(user);
+        User savedUser = userRepo.save(user);
 
         //Create URI of new saved User
         // /users/{id}    id->savedUser.getId(); 
@@ -71,12 +78,38 @@ public class UserResource {
         return ResponseEntity.created(location).build();
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/jpa/users/{id}")
     public void deleteUser(@PathVariable int id){
-        User user = service.deleteById(id);
-        if(user == null){
+        userRepo.deleteById(id);
+    }
+
+    @GetMapping("/jpa/users/{id}/posts")
+    public List<Post> retrieveAllUsersPost(@PathVariable int id){
+        Optional<User> userOptional = userRepo.findById(id);
+        if(!userOptional.isPresent()){
             throw new UserNotFoundException("id-"+id);
         }
+        return userOptional.get().getPosts();
+    }
+
+    @PostMapping("/jpa/users/{id}/posts")
+    public ResponseEntity<Object> createPost(@PathVariable int id, @RequestBody Post post){
+        Optional<User> userOptional = userRepo.findById(id);
+        if(!userOptional.isPresent()){
+            throw new UserNotFoundException("id-"+id);
+        }
+
+        User user = userOptional.get();
+        post.setUser(user);
+
+        postRepo.save(post);
+
+        URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}").buildAndExpand(post.getId())
+                        .toUri();
+        //return status code 
+        return ResponseEntity.created(location).build();
     }
 
 }

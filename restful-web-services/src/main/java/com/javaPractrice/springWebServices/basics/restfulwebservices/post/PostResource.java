@@ -34,7 +34,7 @@ public class PostResource {
 
     @PostMapping(path="/users/{userId}/posts")
     public void createPost(@RequestBody Post post, @PathVariable int userId){
-        post.setUserId(userId);
+        //post.setUserId(userId);
         Post savedPost = service.save(post);
     }
 }

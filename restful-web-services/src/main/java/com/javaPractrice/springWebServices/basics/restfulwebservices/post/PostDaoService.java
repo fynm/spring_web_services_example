@@ -12,11 +12,11 @@ public class PostDaoService {
     
     private static int postsCount = 3;
 
-    static{
-        posts.add(new Post(1, "The first post!", new Date(), 1));
-        posts.add(new Post(2, "The seceond post!", new Date(), 1));
-        posts.add(new Post(3, "The third post!", new Date(), 2));
-    }
+    // static{
+    //     posts.add(new Post(1, "The first post!", new Date(), 1));
+    //     posts.add(new Post(2, "The seceond post!", new Date(), 1));
+    //     posts.add(new Post(3, "The third post!", new Date(), 2));
+    // }
 
     public List<Post> findAll(){
         return posts;
@@ -25,9 +25,9 @@ public class PostDaoService {
     public List<Post> findAllFromUser(int userId){
         List<Post> userPosts = new ArrayList<>();
         for(Post post:posts){
-            if(post.getUserId()==userId){
-                userPosts.add(post);
-            }
+            // if(post.getUserId()==userId){
+            //     userPosts.add(post);
+            // }
         }
         if(userPosts.size() > 0){
             return userPosts;
@@ -37,9 +37,9 @@ public class PostDaoService {
     }
 
     public Post save(Post post){
-        if(post.getId() == null){
-            post.setId(++postsCount);
-        }
+        // if(post.getId() == null){
+        //     post.setId(++postsCount);
+        // }
         posts.add(post);
         return post;
     }

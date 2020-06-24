@@ -21,5 +21,85 @@ Who is configuring dispatcher servlet?
     Spring Web
 
 
+HATEOAS Changes with 2.2.0+
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+EntityModel<User> model = new EntityModel<>(user);
+WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+model.add(linkTo.withRel("all-users"));
+
+
+Internationalization - Will send back different messages based on where the request is coming from -> IE USA will have different return than Japan
+
+
+Content Negotiation -> Download Jackson-dataformat-xml Pom so that requests can get back JSON/XML instead of just JSON -> Also can send XML for POST items (EX- adding user)
+                    -> Note that you should disable this if XML is not needed as RESTful apps should be JSON anyways
+
+
+Swagger -> Rules system or specification for a format for REST APIs.
+
+
+Pom dependencies needed
+<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-spring-web -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-spring-web</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+
+Create a Swagger Config File
+
+As of 6/24/2020 -> use 2.9.1 instead of 2.10 and downgrade spring framework to 2.1. 2.2+ will not work with Swagger
+
+
+http://localhost:8080/v2/api-docs
+
+Description of all doc categories
+info - Description of Api / Version No. / Title / terms of service / contact / license
+host - host name - local -> localhost:portNo. (8080)
+basePath - "/"
+tags - 
+paths - All resources that we are exposing ex - users, users/{id}, posts, etc
+definitions - Pojo info (User.Java Post.java etc)
+
+Swagger Custom Annotations to have better Swagger Documentation
+
+Versioning - creating two versions of the same version 
+    Why? When projects require different outputs for the same service
+        Example Person returns name or firstname and lastname
+
+    Two Approches
+        Have two different URI for two different versions of the service
+        Headers/Content Negotiation Approach -> refer to course video on setup - not coded in examples
+    
+Security
+Enabling Basic Security we use the import
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>2.3.1.RELEASE</version>
+</dependency>
+
+Now when this is found when spring starts it will generate a password that 
+you would have to enable Basic Auth when posting Requests to the server
+
+
+Creating custom username and password in props file
+spring.security.user.name=username
+spring.security.user.password=password
+
 
 

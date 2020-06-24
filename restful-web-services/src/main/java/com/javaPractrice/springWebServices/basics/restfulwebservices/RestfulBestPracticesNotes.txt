@@ -1,0 +1,35 @@
+Richardson Matuirity Model
+
+Defines 3 Levels of Restful Services
+
+Level 0
+    Expose Soap Web Services in Rest Style
+        http://server/getPost
+        http://server/deletePost
+Level 1
+    Expose Web Services with Proper URI
+        http://server/accounts
+        http://server/accounts/10
+Level 2 (Most of our Examples are this)
+    Level 1 + Proper Use of Http Methods
+Level 3
+    Data + Next Possible Actions (Level 2 + HATEOAS)
+    Documentation on what else we can do 
+
+
+Best Practices
+    Consumer First
+    Have good Documentation! (Swagger is an option)
+    Make Best use of HTTP, 
+        Proper Request Methods (GET/POST/PUT/DELETE), 
+        Proper Response Status
+            200-Success
+            404-Resource Not Found
+            400-Bad Request
+            201-Created
+            401-Unauthorized
+            500-Server Error
+    Ensure no secure Info in URI!
+    Use Plurals
+        prefer /users to /user for base
+    Use Nouns for Resources (Some exceptions)
